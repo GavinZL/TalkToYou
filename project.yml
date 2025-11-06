@@ -1,0 +1,21 @@
+name: TalkToYou
+options:
+  bundleIdPrefix: com.talktoyou
+  deploymentTarget:
+    iOS: "13.0"
+  
+targets:
+  TalkToYou:
+    type: application
+    platform: iOS
+    deploymentTarget: "13.0"
+    sources:
+      - TalkToYou
+    settings:
+      base:
+        INFOPLIST_FILE: TalkToYou/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.talktoyou.TalkToYou
+        DEVELOPMENT_TEAM: ""
+        CODE_SIGN_STYLE: Automatic
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1,2"

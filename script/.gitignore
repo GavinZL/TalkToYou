@@ -1,0 +1,26 @@
+# Python 虚拟环境
+venv/
+env/
+.venv/
+
+# 模型文件（较大，不提交）
+*.onnx
+*.mlmodel
+*.mlmodelc
+onnx_models/
+coreml_models/
+
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# 下载的模型
+models/
+.cache/
+
+# 临时文件
+*.tmp
+*.log

@@ -1,0 +1,28 @@
+# Python 依赖包
+# 用于 SenseVoice 模型转换
+# 注意: 需要 Python 3.8-3.11 (不支持 3.12+)
+
+# 深度学习框架
+torch>=2.0.0
+torchaudio>=2.0.0
+
+# 模型转换工具
+onnx>=1.14.0
+onnxruntime>=1.15.0
+onnxscript>=0.1.0  # FunASR ONNX 导出所需
+# coremltools 7.x 不支持 Python 3.12+，使用最新的 8.x 测试版
+coremltools>=8.0b1; python_version >= '3.12'
+coremltools>=7.0,<8.0; python_version < '3.12'
+
+# FunASR 相关
+funasr>=1.0.0
+funasr-onnx>=0.4.0
+
+# 音频处理
+librosa>=0.10.0
+soundfile>=0.12.0
+
+# 辅助库
+numpy>=1.24.0,<2.0; python_version >= '3.12'
+numpy>=1.24.0; python_version < '3.12'
+protobuf>=3.20.0

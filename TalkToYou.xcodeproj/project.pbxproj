@@ -1,0 +1,459 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 63;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		025D525183FBA16086C6883D /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA23A71F1B904B3F569A0B61 /* PersistenceController.swift */; };
+		10A32AF7655286E08BB36399 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F67C48468A34E2451856BC /* ContentView.swift */; };
+		184AEEDC54ACBB21815990FB /* LLMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6876FC42B50ABED8E2E1335 /* LLMService.swift */; };
+		1F46E7A92EB78E3C0003EEC7 /* QwenTTSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F46E7A82EB78E3C0003EEC7 /* QwenTTSService.swift */; };
+		1FE8BC072EBCC9B700B2561F /* VoiceCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE8BC062EBCC9B600B2561F /* VoiceCallView.swift */; };
+		2690780D87FBBE04569523C8 /* TTSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E9411A4B999C7DA092646E /* TTSService.swift */; };
+		37918C432F40E40F671FF689 /* ASRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA19EBE4EF0A99672AF68C82 /* ASRService.swift */; };
+		441E71B215BC4F86D3ECB52B /* ConversationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19E6396711C506DCFC19593 /* ConversationManager.swift */; };
+		5A5C271E5A5D11DDCF7339AD /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F10A929724CA04891AD6EE /* SettingsManager.swift */; };
+		5E5AE12FBC91B83DE0F9857F /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 416525DEFDD829D628F6EFF9 /* HistoryView.swift */; };
+		67632E0CB2AD18DEC036506B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62933F98B30CB44FA8FB547 /* SettingsView.swift */; };
+		760ABB4189E7031E61BF0715 /* TalkToYouApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C356E63B2D4C6F17FC6A5837 /* TalkToYouApp.swift */; };
+		9AAC16D44136F4395F12579A /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DDFE8BAC4318B06F507710 /* ChatView.swift */; };
+		B2DAEC962E519E500D2D55CB /* TalkToYou.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7927BCBB85AFC794633FC155 /* TalkToYou.xcdatamodeld */; };
+		CC518CCAE27D34BDAEE157B0 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035C40312BD208D04685C48C /* AudioRecorder.swift */; };
+		CEA15390B0CD412F96276046 /* DataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9FD899DD6431046247B150 /* DataModels.swift */; };
+		ED01F44FEBB18666411B4836 /* Pods_TalkToYou.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25418A9279A28440A5058B30 /* Pods_TalkToYou.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		035C40312BD208D04685C48C /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
+		082FBA2BEE3F243C79878C95 /* Pods-TalkToYou.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TalkToYou.release.xcconfig"; path = "Target Support Files/Pods-TalkToYou/Pods-TalkToYou.release.xcconfig"; sourceTree = "<group>"; };
+		1F46E7A82EB78E3C0003EEC7 /* QwenTTSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwenTTSService.swift; sourceTree = "<group>"; };
+		1FE8BC062EBCC9B600B2561F /* VoiceCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCallView.swift; sourceTree = "<group>"; };
+		25418A9279A28440A5058B30 /* Pods_TalkToYou.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TalkToYou.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		28F10A929724CA04891AD6EE /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
+		33E9411A4B999C7DA092646E /* TTSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSService.swift; sourceTree = "<group>"; };
+		3E1765AE548872437FACD830 /* TalkToYou.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TalkToYou.xcdatamodel; sourceTree = "<group>"; };
+		416525DEFDD829D628F6EFF9 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		7D9FD899DD6431046247B150 /* DataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModels.swift; sourceTree = "<group>"; };
+		87AA23C33B31B7FACF388C0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B19E6396711C506DCFC19593 /* ConversationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationManager.swift; sourceTree = "<group>"; };
+		C0DDFE8BAC4318B06F507710 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		C356E63B2D4C6F17FC6A5837 /* TalkToYouApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkToYouApp.swift; sourceTree = "<group>"; };
+		D62933F98B30CB44FA8FB547 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		D6876FC42B50ABED8E2E1335 /* LLMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMService.swift; sourceTree = "<group>"; };
+		D99FB37AF2FC39CC021EF835 /* TalkToYou.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalkToYou.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA19EBE4EF0A99672AF68C82 /* ASRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASRService.swift; sourceTree = "<group>"; };
+		E551B297A41B61CB3821950C /* Pods-TalkToYou.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TalkToYou.debug.xcconfig"; path = "Target Support Files/Pods-TalkToYou/Pods-TalkToYou.debug.xcconfig"; sourceTree = "<group>"; };
+		EA23A71F1B904B3F569A0B61 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
+		F3F67C48468A34E2451856BC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3CB35CDC892A3EA83F62254D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED01F44FEBB18666411B4836 /* Pods_TalkToYou.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4377C1B83A7F2415D8C861A4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E551B297A41B61CB3821950C /* Pods-TalkToYou.debug.xcconfig */,
+				082FBA2BEE3F243C79878C95 /* Pods-TalkToYou.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		4D1244F9E282C7D94BAFE48D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				25418A9279A28440A5058B30 /* Pods_TalkToYou.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		565B228A32CC2B34835F08EA /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				1F46E7A82EB78E3C0003EEC7 /* QwenTTSService.swift */,
+				DA19EBE4EF0A99672AF68C82 /* ASRService.swift */,
+				035C40312BD208D04685C48C /* AudioRecorder.swift */,
+				B19E6396711C506DCFC19593 /* ConversationManager.swift */,
+				D6876FC42B50ABED8E2E1335 /* LLMService.swift */,
+				28F10A929724CA04891AD6EE /* SettingsManager.swift */,
+				33E9411A4B999C7DA092646E /* TTSService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		63F47B7AD1CCC4C225F571D0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7927BCBB85AFC794633FC155 /* TalkToYou.xcdatamodeld */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		91B1A45E1706F8ADEECD2F7D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1FE8BC062EBCC9B600B2561F /* VoiceCallView.swift */,
+				C0DDFE8BAC4318B06F507710 /* ChatView.swift */,
+				416525DEFDD829D628F6EFF9 /* HistoryView.swift */,
+				D62933F98B30CB44FA8FB547 /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		9501324392E06AD35D9BD3C0 = {
+			isa = PBXGroup;
+			children = (
+				A341C9C897EE9CAE4252DE4C /* TalkToYou */,
+				F07E1F16642E909F2962BA22 /* Products */,
+				4377C1B83A7F2415D8C861A4 /* Pods */,
+				4D1244F9E282C7D94BAFE48D /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		A341C9C897EE9CAE4252DE4C /* TalkToYou */ = {
+			isa = PBXGroup;
+			children = (
+				F3F67C48468A34E2451856BC /* ContentView.swift */,
+				87AA23C33B31B7FACF388C0F /* Info.plist */,
+				C356E63B2D4C6F17FC6A5837 /* TalkToYouApp.swift */,
+				B72D1D146B23E7938408DEE6 /* Models */,
+				63F47B7AD1CCC4C225F571D0 /* Resources */,
+				565B228A32CC2B34835F08EA /* Services */,
+				91B1A45E1706F8ADEECD2F7D /* Views */,
+			);
+			path = TalkToYou;
+			sourceTree = "<group>";
+		};
+		B72D1D146B23E7938408DEE6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7D9FD899DD6431046247B150 /* DataModels.swift */,
+				EA23A71F1B904B3F569A0B61 /* PersistenceController.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F07E1F16642E909F2962BA22 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D99FB37AF2FC39CC021EF835 /* TalkToYou.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3FC1C163FD27EA3D48995E78 /* TalkToYou */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C44BFAE845803054D5694AF2 /* Build configuration list for PBXNativeTarget "TalkToYou" */;
+			buildPhases = (
+				994DD19BC21A6874C6EB07F3 /* [CP] Check Pods Manifest.lock */,
+				8A1E5BB17EB594A3010186B2 /* Sources */,
+				3CB35CDC892A3EA83F62254D /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TalkToYou;
+			productName = TalkToYou;
+			productReference = D99FB37AF2FC39CC021EF835 /* TalkToYou.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E035A711FBD9B17FECBBE2CE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					3FC1C163FD27EA3D48995E78 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = DFA104D1874EEAA31DA029AA /* Build configuration list for PBXProject "TalkToYou" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 9501324392E06AD35D9BD3C0;
+			minimizedProjectReferenceProxies = 1;
+			productRefGroup = F07E1F16642E909F2962BA22 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3FC1C163FD27EA3D48995E78 /* TalkToYou */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		994DD19BC21A6874C6EB07F3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TalkToYou-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8A1E5BB17EB594A3010186B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				37918C432F40E40F671FF689 /* ASRService.swift in Sources */,
+				CC518CCAE27D34BDAEE157B0 /* AudioRecorder.swift in Sources */,
+				9AAC16D44136F4395F12579A /* ChatView.swift in Sources */,
+				10A32AF7655286E08BB36399 /* ContentView.swift in Sources */,
+				441E71B215BC4F86D3ECB52B /* ConversationManager.swift in Sources */,
+				CEA15390B0CD412F96276046 /* DataModels.swift in Sources */,
+				1F46E7A92EB78E3C0003EEC7 /* QwenTTSService.swift in Sources */,
+				5E5AE12FBC91B83DE0F9857F /* HistoryView.swift in Sources */,
+				184AEEDC54ACBB21815990FB /* LLMService.swift in Sources */,
+				025D525183FBA16086C6883D /* PersistenceController.swift in Sources */,
+				5A5C271E5A5D11DDCF7339AD /* SettingsManager.swift in Sources */,
+				1FE8BC072EBCC9B700B2561F /* VoiceCallView.swift in Sources */,
+				67632E0CB2AD18DEC036506B /* SettingsView.swift in Sources */,
+				2690780D87FBBE04569523C8 /* TTSService.swift in Sources */,
+				B2DAEC962E519E500D2D55CB /* TalkToYou.xcdatamodeld in Sources */,
+				760ABB4189E7031E61BF0715 /* TalkToYouApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2C15430F6C612C3A45488013 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E551B297A41B61CB3821950C /* Pods-TalkToYou.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 893973NXS8;
+				INFOPLIST_FILE = TalkToYou/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.talktoyou.TalkToYou;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		84F651E82276A4B7BFE48BFE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A9EEE8877CE0DDDAB6BD3AFE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AE14F1CDA6CC2F6EBF12950B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 082FBA2BEE3F243C79878C95 /* Pods-TalkToYou.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 893973NXS8;
+				INFOPLIST_FILE = TalkToYou/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.talktoyou.TalkToYou;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C44BFAE845803054D5694AF2 /* Build configuration list for PBXNativeTarget "TalkToYou" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2C15430F6C612C3A45488013 /* Debug */,
+				AE14F1CDA6CC2F6EBF12950B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DFA104D1874EEAA31DA029AA /* Build configuration list for PBXProject "TalkToYou" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9EEE8877CE0DDDAB6BD3AFE /* Debug */,
+				84F651E82276A4B7BFE48BFE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		7927BCBB85AFC794633FC155 /* TalkToYou.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				3E1765AE548872437FACD830 /* TalkToYou.xcdatamodel */,
+			);
+			currentVersion = 3E1765AE548872437FACD830 /* TalkToYou.xcdatamodel */;
+			path = TalkToYou.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = E035A711FBD9B17FECBBE2CE /* Project object */;
+}

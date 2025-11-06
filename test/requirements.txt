@@ -1,0 +1,8 @@
+# WebSocket 客户端
+websockets==11.0.3
+
+# 麦克风录音（可选）
+# 如果需要使用麦克风测试，需要先安装 PortAudio:
+# macOS: brew install portaudio
+# 然后安装: pip install pyaudio==0.2.11
+# pyaudio==0.2.11
