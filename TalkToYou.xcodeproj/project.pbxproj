@@ -20,15 +20,15 @@
 		67632E0CB2AD18DEC036506B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62933F98B30CB44FA8FB547 /* SettingsView.swift */; };
 		760ABB4189E7031E61BF0715 /* TalkToYouApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C356E63B2D4C6F17FC6A5837 /* TalkToYouApp.swift */; };
 		9AAC16D44136F4395F12579A /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DDFE8BAC4318B06F507710 /* ChatView.swift */; };
+		AF22B7AB2EBCFA4400B4A583 /* RoleSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF22B7AA2EBCFA4400B4A583 /* RoleSelectionView.swift */; };
+		AF22B7AF2EBCFAB400B4A583 /* RolePresets.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF22B7AD2EBCFAB400B4A583 /* RolePresets.swift */; };
 		B2DAEC962E519E500D2D55CB /* TalkToYou.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7927BCBB85AFC794633FC155 /* TalkToYou.xcdatamodeld */; };
 		CC518CCAE27D34BDAEE157B0 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035C40312BD208D04685C48C /* AudioRecorder.swift */; };
 		CEA15390B0CD412F96276046 /* DataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9FD899DD6431046247B150 /* DataModels.swift */; };
-		ED01F44FEBB18666411B4836 /* Pods_TalkToYou.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25418A9279A28440A5058B30 /* Pods_TalkToYou.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		035C40312BD208D04685C48C /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
-		082FBA2BEE3F243C79878C95 /* Pods-TalkToYou.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TalkToYou.release.xcconfig"; path = "Target Support Files/Pods-TalkToYou/Pods-TalkToYou.release.xcconfig"; sourceTree = "<group>"; };
 		1F46E7A82EB78E3C0003EEC7 /* QwenTTSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwenTTSService.swift; sourceTree = "<group>"; };
 		1FE8BC062EBCC9B600B2561F /* VoiceCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCallView.swift; sourceTree = "<group>"; };
 		25418A9279A28440A5058B30 /* Pods_TalkToYou.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TalkToYou.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -38,6 +38,8 @@
 		416525DEFDD829D628F6EFF9 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		7D9FD899DD6431046247B150 /* DataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModels.swift; sourceTree = "<group>"; };
 		87AA23C33B31B7FACF388C0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		AF22B7AA2EBCFA4400B4A583 /* RoleSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleSelectionView.swift; sourceTree = "<group>"; };
+		AF22B7AD2EBCFAB400B4A583 /* RolePresets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RolePresets.swift; sourceTree = "<group>"; };
 		B19E6396711C506DCFC19593 /* ConversationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationManager.swift; sourceTree = "<group>"; };
 		C0DDFE8BAC4318B06F507710 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		C356E63B2D4C6F17FC6A5837 /* TalkToYouApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkToYouApp.swift; sourceTree = "<group>"; };
@@ -45,7 +47,6 @@
 		D6876FC42B50ABED8E2E1335 /* LLMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMService.swift; sourceTree = "<group>"; };
 		D99FB37AF2FC39CC021EF835 /* TalkToYou.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalkToYou.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA19EBE4EF0A99672AF68C82 /* ASRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASRService.swift; sourceTree = "<group>"; };
-		E551B297A41B61CB3821950C /* Pods-TalkToYou.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TalkToYou.debug.xcconfig"; path = "Target Support Files/Pods-TalkToYou/Pods-TalkToYou.debug.xcconfig"; sourceTree = "<group>"; };
 		EA23A71F1B904B3F569A0B61 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		F3F67C48468A34E2451856BC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -55,22 +56,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ED01F44FEBB18666411B4836 /* Pods_TalkToYou.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4377C1B83A7F2415D8C861A4 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				E551B297A41B61CB3821950C /* Pods-TalkToYou.debug.xcconfig */,
-				082FBA2BEE3F243C79878C95 /* Pods-TalkToYou.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		4D1244F9E282C7D94BAFE48D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -104,6 +95,7 @@
 		91B1A45E1706F8ADEECD2F7D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				AF22B7AA2EBCFA4400B4A583 /* RoleSelectionView.swift */,
 				1FE8BC062EBCC9B600B2561F /* VoiceCallView.swift */,
 				C0DDFE8BAC4318B06F507710 /* ChatView.swift */,
 				416525DEFDD829D628F6EFF9 /* HistoryView.swift */,
@@ -117,7 +109,6 @@
 			children = (
 				A341C9C897EE9CAE4252DE4C /* TalkToYou */,
 				F07E1F16642E909F2962BA22 /* Products */,
-				4377C1B83A7F2415D8C861A4 /* Pods */,
 				4D1244F9E282C7D94BAFE48D /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -139,6 +130,7 @@
 		B72D1D146B23E7938408DEE6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				AF22B7AD2EBCFAB400B4A583 /* RolePresets.swift */,
 				7D9FD899DD6431046247B150 /* DataModels.swift */,
 				EA23A71F1B904B3F569A0B61 /* PersistenceController.swift */,
 			);
@@ -160,7 +152,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C44BFAE845803054D5694AF2 /* Build configuration list for PBXNativeTarget "TalkToYou" */;
 			buildPhases = (
-				994DD19BC21A6874C6EB07F3 /* [CP] Check Pods Manifest.lock */,
 				8A1E5BB17EB594A3010186B2 /* Sources */,
 				3CB35CDC892A3EA83F62254D /* Frameworks */,
 			);
@@ -206,31 +197,6 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		994DD19BC21A6874C6EB07F3 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-TalkToYou-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		8A1E5BB17EB594A3010186B2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -240,6 +206,7 @@
 				CC518CCAE27D34BDAEE157B0 /* AudioRecorder.swift in Sources */,
 				9AAC16D44136F4395F12579A /* ChatView.swift in Sources */,
 				10A32AF7655286E08BB36399 /* ContentView.swift in Sources */,
+				AF22B7AB2EBCFA4400B4A583 /* RoleSelectionView.swift in Sources */,
 				441E71B215BC4F86D3ECB52B /* ConversationManager.swift in Sources */,
 				CEA15390B0CD412F96276046 /* DataModels.swift in Sources */,
 				1F46E7A92EB78E3C0003EEC7 /* QwenTTSService.swift in Sources */,
@@ -252,6 +219,7 @@
 				2690780D87FBBE04569523C8 /* TTSService.swift in Sources */,
 				B2DAEC962E519E500D2D55CB /* TalkToYou.xcdatamodeld in Sources */,
 				760ABB4189E7031E61BF0715 /* TalkToYouApp.swift in Sources */,
+				AF22B7AF2EBCFAB400B4A583 /* RolePresets.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,7 +228,6 @@
 /* Begin XCBuildConfiguration section */
 		2C15430F6C612C3A45488013 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E551B297A41B61CB3821950C /* Pods-TalkToYou.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -400,7 +367,6 @@
 		};
 		AE14F1CDA6CC2F6EBF12950B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 082FBA2BEE3F243C79878C95 /* Pods-TalkToYou.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";

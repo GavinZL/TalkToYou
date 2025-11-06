@@ -7,6 +7,7 @@ struct ChatView: View {
     @State private var inputText: String = ""
     @State private var showingSettings = false
     @State private var showingVoiceCall = false
+    @State private var showingRoleSelection = false
     
     var body: some View {
         NavigationView {
@@ -53,6 +54,18 @@ struct ChatView: View {
             .navigationTitle("智能对话")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        showingRoleSelection = true
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "person.2.fill")
+                            Text(settingsManager.settings.roleConfig.roleName)
+                                .font(.subheadline)
+                        }
+                    }
+                }
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         showingSettings = true
@@ -63,6 +76,9 @@ struct ChatView: View {
             }
             .sheet(isPresented: $showingSettings) {
                 SettingsView()
+            }
+            .sheet(isPresented: $showingRoleSelection) {
+                RoleSelectionView()
             }
             .fullScreenCover(isPresented: $showingVoiceCall) {
                 VoiceCallView(
