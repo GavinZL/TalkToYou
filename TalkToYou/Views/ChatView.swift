@@ -32,8 +32,8 @@ struct ChatView: View {
                         )
                     
                     // 占位空间，确保输入区域不会贴顶
-                    Spacer()
-                        .frame(minHeight: 100)  // 最小高度 100pt
+                    // Spacer()
+                    //     .frame(minHeight: 100)  // 最小高度 100pt
                     
                     // 整合的输入控制区域（状态栏 + 输入框 + 功能菜单）
                     ChatInputControlView(

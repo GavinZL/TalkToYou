@@ -11,6 +11,14 @@ struct RolePreset: Identifiable, Codable {
     var description: String
     var isCustom: Bool
     
+    // 语音设置
+    var voiceId: String
+    var speechRate: Float
+    var speechPitch: Float
+    var speechVolume: Float
+    var ttsLanguage: String
+    var ttsVoice: String
+    
     init(
         id: UUID = UUID(),
         name: String,
@@ -19,7 +27,13 @@ struct RolePreset: Identifiable, Codable {
         icon: String = "person.circle.fill",
         color: String = "blue",
         description: String = "",
-        isCustom: Bool = false
+        isCustom: Bool = false,
+        voiceId: String = "zh-CN",
+        speechRate: Float = 1.0,
+        speechPitch: Float = 1.0,
+        speechVolume: Float = 1.0,
+        ttsLanguage: String = "Auto",
+        ttsVoice: String = "Cherry"
     ) {
         self.id = id
         self.name = name
@@ -29,6 +43,27 @@ struct RolePreset: Identifiable, Codable {
         self.color = color
         self.description = description
         self.isCustom = isCustom
+        self.voiceId = voiceId
+        self.speechRate = speechRate
+        self.speechPitch = speechPitch
+        self.speechVolume = speechVolume
+        self.ttsLanguage = ttsLanguage
+        self.ttsVoice = ttsVoice
+    }
+    
+    // 转换为 RoleConfig
+    func toRoleConfig() -> RoleConfig {
+        return RoleConfig(
+            roleName: name,
+            rolePrompt: prompt,
+            personality: personality,
+            voiceId: voiceId,
+            speechRate: speechRate,
+            speechPitch: speechPitch,
+            speechVolume: speechVolume,
+            ttsLanguage: ttsLanguage,
+            ttsVoice: ttsVoice
+        )
     }
 }
 
@@ -41,58 +76,115 @@ class RolePresetsManager: ObservableObject {
     
     private let userDefaults = UserDefaults.standard
     private let customRolesKey = "customRoles"
+    private let presetsKey = "rolePresets"  // 用于保存修改后的预设角色
     
     private init() {
-        loadPresetRoles()
+        loadDefaultPresets()
+        loadCustomPresets()  // 加载用户修改的预设
         loadCustomRoles()
     }
     
     // MARK: - 加载预制角色
-    private func loadPresetRoles() {
+    private func loadDefaultPresets() {
         presets = [
+            RolePreset(
+                name: "智能助手",
+                prompt: "你是一个友好、专业的AI助手，能够帮助用户解答各种问题。",
+                personality: "友好、专业、耐心",
+                icon: "brain.head.profile",
+                color: "blue",
+                description: "全能助手，随时为您服务",
+                ttsVoice: "Cherry"
+            ),
+            
+            RolePreset(
+                name: "知心姐姐",
+                prompt: "你是一位温柔体贴的知心姐姐，善于倾听和理解他人的情感，能够给予温暖的建议和鼓励。",
+                personality: "温柔、体贴、善解人意",
+                icon: "heart.circle.fill",
+                color: "pink",
+                description: "倾听您的心声，给予温暖",
+                ttsVoice: "Cherry"
+            ),
+            
+            RolePreset(
+                name: "学习导师",
+                prompt: "你是一位经验丰富的学习导师，擅长用简单易懂的方式讲解复杂概念，帮助学生更好地理解和掌握知识。",
+                personality: "专业、耐心、启发性",
+                icon: "graduationcap.fill",
+                color: "green",
+                description: "专业指导，助您成长",
+                ttsVoice: "Ethan"
+            ),
+            
+            RolePreset(
+                name: "幽默大师",
+                prompt: "你是一位风趣幽默的对话大师，善于用幽默的方式与人交流，让对话充满欢声笑语。",
+                personality: "幽默、风趣、活泼",
+                icon: "face.smiling.fill",
+                color: "orange",
+                description: "带来欢乐，让生活更有趣",
+                ttsVoice: "Ryan"
+            ),
+            
+            RolePreset(
+                name: "技术专家",
+                prompt: "你是一位资深的技术专家，对编程、软件开发和IT技术有深入的理解，能够提供专业的技术指导。",
+                personality: "严谨、专业、逻辑清晰",
+                icon: "wrench.fill",
+                color: "indigo",
+                description: "解决技术难题的专家",
+                ttsVoice: "Elias"
+            ),
+            
+            RolePreset(
+                name: "创意顾问",
+                prompt: "你是一位富有创意的顾问，善于激发灵感，提供独特的创意建议和解决方案。",
+                personality: "创新、灵活、富有想象力",
+                icon: "lightbulb.fill",
+                color: "yellow",
+                description: "激发灵感，创造无限可能",
+                ttsVoice: "Jennifer"
+            ),
+            
+            RolePreset(
+                name: "健康顾问",
+                prompt: "你是一位专业的健康顾问，了解健康养生知识，能够提供科学的健康建议和生活方式指导。",
+                personality: "专业、关怀、科学",
+                icon: "heart.text.square.fill",
+                color: "red",
+                description: "关注健康，享受生活",
+                ttsVoice: "Jada"
+            ),
+            
+            RolePreset(
+                name: "旅游达人",
+                prompt: "你是一位热爱旅行的达人，去过世界各地，能够分享旅游经验、推荐景点和提供旅行建议。",
+                personality: "热情、见多识广、乐于分享",
+                icon: "airplane.circle.fill",
+                color: "teal",
+                description: "探索世界，分享旅程",
+                ttsVoice: "Sunny"
+            ),
+            
+            RolePreset(
+                name: "美食家",
+                prompt: "你是一位资深的美食家，对各地美食有深入的了解，能够推荐美食、分享烹饪技巧和饮食文化。",
+                personality: "热情、品味独特、善于分享",
+                icon: "fork.knife.circle.fill",
+                color: "brown",
+                description: "品味美食，享受生活",
+                ttsVoice: "Li"
+            ),
+            
             RolePreset(
                 name: "数学老师",
                 prompt: "你是一位经验丰富的数学老师，擅长用浅显易懂的方式讲解数学概念。你会先了解学生的水平，然后循序渐进地引导学生思考，而不是直接给出答案。你鼓励学生独立思考，培养数学思维。",
                 personality: "耐心、严谨、善于引导",
                 icon: "function",
                 color: "blue",
-                description: "耐心讲解数学知识，培养逻辑思维"
-            ),
-            
-            RolePreset(
-                name: "律师",
-                prompt: "你是一位专业的律师，精通法律知识。你会客观、理性地分析问题，提供专业的法律建议。你会先了解案件的具体情况，然后从法律角度给出分析和建议。你注重细节，强调证据的重要性。",
-                personality: "专业、严谨、客观",
-                icon: "hammer.fill",
-                color: "gray",
-                description: "提供专业法律咨询，分析法律问题"
-            ),
-            
-            RolePreset(
-                name: "健康教练",
-                prompt: "你是一位认证的健康教练，专注于帮助人们建立健康的生活方式。你会根据个人情况制定合理的饮食和运动计划，强调循序渐进和可持续性。你鼓励积极的心态，关注身心健康的平衡。",
-                personality: "积极、专业、关怀",
-                icon: "heart.fill",
-                color: "red",
-                description: "指导健康生活，制定运动饮食计划"
-            ),
-            
-            RolePreset(
-                name: "爸爸",
-                prompt: "你是一位慈爱的父亲，关心孩子的成长。你会倾听孩子的想法，给予温暖的支持和鼓励。在孩子遇到困难时，你会帮助他们分析问题，但更多是引导他们自己找到解决方案。你用自己的人生经验给予建议，同时尊重孩子的选择。",
-                personality: "慈爱、睿智、支持",
-                icon: "figure.stand",
-                color: "brown",
-                description: "慈爱的父亲形象，给予温暖支持"
-            ),
-            
-            RolePreset(
-                name: "妈妈",
-                prompt: "你是一位温柔体贴的母亲，细心关注孩子的情绪和需求。你会用温暖的话语安慰孩子，在他们开心时分享快乐，在他们难过时给予拥抱。你既是朋友又是导师，用爱和智慧陪伴孩子成长。",
-                personality: "温柔、体贴、智慧",
-                icon: "heart.circle.fill",
-                color: "pink",
-                description: "温柔的母亲形象，细心体贴关怀"
+                description: "耐心讲解数学知识，培养逻辑思维",
+                ttsVoice: "Dylan"
             ),
             
             RolePreset(
@@ -101,7 +193,8 @@ class RolePresetsManager: ObservableObject {
                 personality: "专业、共情、支持",
                 icon: "brain.head.profile",
                 color: "purple",
-                description: "专业心理咨询，倾听内心声音"
+                description: "专业心理咨询，倾听内心声音",
+                ttsVoice: "Cherry"
             ),
             
             RolePreset(
@@ -110,54 +203,30 @@ class RolePresetsManager: ObservableObject {
                 personality: "专业、友好、鼓励",
                 icon: "character.book.closed.fill",
                 color: "green",
-                description: "提升英语能力，纠正语法词汇"
-            ),
-            
-            RolePreset(
-                name: "职业顾问",
-                prompt: "你是一位资深的职业规划顾问，帮助人们找到合适的职业发展方向。你会了解个人的兴趣、能力和价值观，提供客观的职业建议。你关注行业趋势，帮助人们提升职业竞争力，实现职业目标。",
-                personality: "专业、客观、前瞻",
-                icon: "briefcase.fill",
-                color: "orange",
-                description: "规划职业发展，提供职场建议"
-            ),
-            
-            RolePreset(
-                name: "编程导师",
-                prompt: "你是一位经验丰富的编程导师，擅长教授编程知识和最佳实践。你会根据学习者的水平调整教学内容，用实际案例帮助理解概念。你强调代码质量和编程思维，鼓励独立解决问题。",
-                personality: "专业、耐心、实用",
-                icon: "chevron.left.forwardslash.chevron.right",
-                color: "indigo",
-                description: "教授编程知识，培养编程思维"
-            ),
-            
-            RolePreset(
-                name: "美食顾问",
-                prompt: "你是一位美食专家，对各国料理都有深入了解。你会根据食材、口味偏好和营养需求推荐菜谱，提供烹饪技巧。你热爱分享美食文化，让烹饪变得简单有趣。",
-                personality: "热情、专业、创意",
-                icon: "fork.knife",
-                color: "yellow",
-                description: "推荐美食菜谱，分享烹饪技巧"
-            ),
-            
-            RolePreset(
-                name: "旅行顾问",
-                prompt: "你是一位资深旅行顾问，游历过世界各地。你会根据预算、时间和兴趣推荐旅行目的地和行程安排。你分享当地文化、美食和注意事项，帮助制定完美的旅行计划。",
-                personality: "热情、见识广博、细致",
-                icon: "airplane",
-                color: "cyan",
-                description: "规划旅行路线，分享旅行攻略"
-            ),
-            
-            RolePreset(
-                name: "理财顾问",
-                prompt: "你是一位专业的理财规划师，帮助人们做好财务管理。你会分析个人财务状况，提供储蓄、投资和风险管理建议。你强调长期规划和稳健投资，帮助实现财务目标。",
-                personality: "专业、谨慎、负责",
-                icon: "chart.line.uptrend.xyaxis",
-                color: "teal",
-                description: "规划财务管理，提供投资建议"
+                description: "提升英语能力，纠正语法词汇",
+                ttsVoice: "Jennifer"
             )
         ]
+    }
+    
+    // 加载用户修改的预设角色
+    private func loadCustomPresets() {
+        if let data = userDefaults.data(forKey: presetsKey),
+           let savedPresets = try? JSONDecoder().decode([RolePreset].self, from: data) {
+            // 合并，用户修改的覆盖默认的
+            for savedPreset in savedPresets {
+                if let index = presets.firstIndex(where: { $0.id == savedPreset.id }) {
+                    presets[index] = savedPreset
+                }
+            }
+        }
+    }
+    
+    // 保存预设角色的修改
+    private func savePresets() {
+        if let data = try? JSONEncoder().encode(presets) {
+            userDefaults.set(data, forKey: presetsKey)
+        }
     }
     
     // MARK: - 加载自定义角色
@@ -175,7 +244,15 @@ class RolePresetsManager: ObservableObject {
         }
     }
     
-    // MARK: - 添加自定义角色
+    // MARK: - 预设角色管理
+    func updatePreset(_ role: RolePreset) {
+        if let index = presets.firstIndex(where: { $0.id == role.id }) {
+            presets[index] = role
+            savePresets()
+        }
+    }
+    
+    // MARK: - 自定义角色管理
     func addCustomRole(_ role: RolePreset) {
         var customRole = role
         customRole.isCustom = true

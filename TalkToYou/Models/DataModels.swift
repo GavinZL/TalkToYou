@@ -76,14 +76,34 @@ struct RoleConfig: Codable {
     var rolePrompt: String
     var personality: String
     
+    // 语音设置（从 AppSettings 迁移到角色配置中）
+    var voiceId: String
+    var speechRate: Float
+    var speechPitch: Float
+    var speechVolume: Float
+    var ttsLanguage: String
+    var ttsVoice: String
+    
     init(
         roleName: String = "智能助手",
         rolePrompt: String = "你是一个友好的AI助手",
-        personality: String = "友好、专业"
+        personality: String = "友好、专业",
+        voiceId: String = "zh-CN",
+        speechRate: Float = 1.0,
+        speechPitch: Float = 1.0,
+        speechVolume: Float = 1.0,
+        ttsLanguage: String = "Auto",
+        ttsVoice: String = "Cherry"
     ) {
         self.roleName = roleName
         self.rolePrompt = rolePrompt
         self.personality = personality
+        self.voiceId = voiceId
+        self.speechRate = speechRate
+        self.speechPitch = speechPitch
+        self.speechVolume = speechVolume
+        self.ttsLanguage = ttsLanguage
+        self.ttsVoice = ttsVoice
     }
 }
 
@@ -96,16 +116,6 @@ struct AppSettings: Codable {
     
     // 角色设定
     var roleConfig: RoleConfig
-    
-    // 语音设置
-    var voiceId: String
-    var speechRate: Float
-    var speechPitch: Float
-    var speechVolume: Float
-    
-    // TTS语音配置
-    var ttsLanguage: String  // 播放语言
-    var ttsVoice: String     // 音色
     
     // 背景设置
     var backgroundImageName: String?  // 背景图片名称
@@ -121,12 +131,6 @@ struct AppSettings: Codable {
         apiEndpoint: String = "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation",
         modelVersion: String = "qwen3-max",
         roleConfig: RoleConfig = RoleConfig(),
-        voiceId: String = "zh-CN",
-        speechRate: Float = 0.5,
-        speechPitch: Float = 1.0,
-        speechVolume: Float = 1.0,
-        ttsLanguage: String = "Auto",
-        ttsVoice: String = "Cherry",
         backgroundImageName: String? = nil,
         backgroundOpacity: Double = 0.3,
         contextTurns: Int = 10,
@@ -137,12 +141,6 @@ struct AppSettings: Codable {
         self.apiEndpoint = apiEndpoint
         self.modelVersion = modelVersion
         self.roleConfig = roleConfig
-        self.voiceId = voiceId
-        self.speechRate = speechRate
-        self.speechPitch = speechPitch
-        self.speechVolume = speechVolume
-        self.ttsLanguage = ttsLanguage
-        self.ttsVoice = ttsVoice
         self.backgroundImageName = backgroundImageName
         self.backgroundOpacity = backgroundOpacity
         self.contextTurns = contextTurns

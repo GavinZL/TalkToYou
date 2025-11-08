@@ -52,9 +52,9 @@ class TTSService: NSObject, ObservableObject {
         // 根据检测到的语言选择语音
         let voice = selectVoice(for: detectedLanguage)
         utterance.voice = voice
-        utterance.rate = settings.settings.speechRate
-        utterance.pitchMultiplier = settings.settings.speechPitch
-        utterance.volume = settings.settings.speechVolume
+        utterance.rate = settings.settings.roleConfig.speechRate
+        utterance.pitchMultiplier = settings.settings.roleConfig.speechPitch
+        utterance.volume = settings.settings.roleConfig.speechVolume
         
         print("🎙️ [TTS] 语音配置: language=\(voice?.language ?? "unknown"), name=\(voice?.name ?? "unknown"), rate=\(utterance.rate)")
         

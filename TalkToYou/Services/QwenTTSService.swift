@@ -38,9 +38,9 @@ class QwenTTSService: NSObject, ObservableObject {
         let processedText = preprocessText(text)
         print("📝 [Qwen-TTS] 开始语音合成: \(processedText.prefix(50))...")
         
-        // 从设置中获取语言和音色
-        let languageType = settings.settings.ttsLanguage
-        let voice = settings.settings.ttsVoice
+        // 从设置中获取语言和音色（从角色配置中获取）
+        let languageType = settings.settings.roleConfig.ttsLanguage
+        let voice = settings.settings.roleConfig.ttsVoice
         
         print("🌐 [Qwen-TTS] 配置语言: \(languageType)")
         print("🎙️ [Qwen-TTS] 配置音色: \(voice)")
@@ -225,7 +225,7 @@ class QwenTTSService: NSObject, ObservableObject {
             // 创建音频播放器
             audioPlayer = try AVAudioPlayer(data: audioData)
             audioPlayer?.delegate = self
-            audioPlayer?.volume = settings.settings.speechVolume
+            audioPlayer?.volume = settings.settings.roleConfig.speechVolume
             
             // 开始播放
             guard let player = audioPlayer, player.prepareToPlay(), player.play() else {

@@ -19,9 +19,15 @@ class SettingsManager: ObservableObject {
     // MARK: - Load Settings
     func loadSettings() {
         // 从UserDefaults加载设置
-        if let data = userDefaults.data(forKey: settingsKey),
-           let decoded = try? JSONDecoder().decode(AppSettings.self, from: data) {
-            self.settings = decoded
+        if let data = userDefaults.data(forKey: settingsKey) {
+            // 尝试加载新格式
+            if let decoded = try? JSONDecoder().decode(AppSettings.self, from: data) {
+                self.settings = decoded
+            } else {
+                // 如果新格式失败，尝试迁移旧数据
+                print("⚠️ [设置] 检测到旧版本数据，开始迁移...")
+                migrateOldSettings(from: data)
+            }
         }
         
         // 从Keychain加载API密钥
@@ -58,16 +64,16 @@ class SettingsManager: ObservableObject {
     }
     
     func updateVoiceSettings(voiceId: String, rate: Float, pitch: Float, volume: Float) {
-        settings.voiceId = voiceId
-        settings.speechRate = rate
-        settings.speechPitch = pitch
-        settings.speechVolume = volume
+        settings.roleConfig.voiceId = voiceId
+        settings.roleConfig.speechRate = rate
+        settings.roleConfig.speechPitch = pitch
+        settings.roleConfig.speechVolume = volume
         saveSettings()
     }
     
     func updateTTSSettings(language: String, voice: String) {
-        settings.ttsLanguage = language
-        settings.ttsVoice = voice
+        settings.roleConfig.ttsLanguage = language
+        settings.roleConfig.ttsVoice = voice
         saveSettings()
     }
     
@@ -131,6 +137,70 @@ class SettingsManager: ObservableObject {
         return nil
     }
     
+    // MARK: - Data Migration
+    private func migrateOldSettings(from data: Data) {
+        // 定义旧版本的数据结构
+        struct OldAppSettings: Codable {
+            var apiKey: String
+            var apiEndpoint: String
+            var modelVersion: String
+            var roleConfig: OldRoleConfig
+            var voiceId: String
+            var speechRate: Float
+            var speechPitch: Float
+            var speechVolume: Float
+            var ttsLanguage: String
+            var ttsVoice: String
+            var backgroundImageName: String?
+            var backgroundOpacity: Double
+            var contextTurns: Int
+            var temperature: Float
+            var maxTokens: Int
+        }
+        
+        struct OldRoleConfig: Codable {
+            var roleName: String
+            var rolePrompt: String
+            var personality: String
+        }
+        
+        // 尝试解析旧数据
+        if let oldSettings = try? JSONDecoder().decode(OldAppSettings.self, from: data) {
+            print("✅ [迁移] 成功解析旧数据")
+            
+            // 迁移到新结构：将语音设置移动到 RoleConfig 中
+            let newRoleConfig = RoleConfig(
+                roleName: oldSettings.roleConfig.roleName,
+                rolePrompt: oldSettings.roleConfig.rolePrompt,
+                personality: oldSettings.roleConfig.personality,
+                voiceId: oldSettings.voiceId,
+                speechRate: oldSettings.speechRate,
+                speechPitch: oldSettings.speechPitch,
+                speechVolume: oldSettings.speechVolume,
+                ttsLanguage: oldSettings.ttsLanguage,
+                ttsVoice: oldSettings.ttsVoice
+            )
+            
+            self.settings = AppSettings(
+                apiKey: oldSettings.apiKey,
+                apiEndpoint: oldSettings.apiEndpoint,
+                modelVersion: oldSettings.modelVersion,
+                roleConfig: newRoleConfig,
+                backgroundImageName: oldSettings.backgroundImageName,
+                backgroundOpacity: oldSettings.backgroundOpacity,
+                contextTurns: oldSettings.contextTurns,
+                temperature: oldSettings.temperature,
+                maxTokens: oldSettings.maxTokens
+            )
+            
+            // 保存迁移后的数据
+            saveSettings()
+            print("✅ [迁移] 数据迁移完成，语音设置已移动到角色配置中")
+        } else {
+            print("❌ [迁移] 无法解析旧数据，使用默认设置")
+        }
+    }
+    
     // MARK: - Validation
     func validateAPIKey() -> Bool {
         return !settings.apiKey.isEmpty
@@ -145,11 +215,11 @@ class SettingsManager: ObservableObject {
             return (false, "请配置API地址")
         }
         
-        if settings.speechRate < 0.4 || settings.speechRate > 0.6 {
-            return (false, "语速设置超出范围(0.4-0.6)")
+        if settings.roleConfig.speechRate < 0 || settings.roleConfig.speechRate > 2.0 {
+            return (false, "语速设置超出范围(0-2.0)")
         }
         
-        if settings.speechPitch < 0.8 || settings.speechPitch > 1.2 {
+        if settings.roleConfig.speechPitch < 0.8 || settings.roleConfig.speechPitch > 1.2 {
             return (false, "音调设置超出范围(0.8-1.2)")
         }
         
