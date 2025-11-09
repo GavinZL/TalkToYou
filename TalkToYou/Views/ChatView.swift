@@ -132,9 +132,13 @@ struct ChatView: View {
                 }
             }
             .onAppear {
-                if manager.currentSession == nil {
-                    manager.startNewSession()
-                }
+                // 加载或创建当前角色的会话
+                manager.loadOrCreateSession()
+            }
+            .onChange(of: settingsManager.settings.roleConfig.roleName) { _ in
+                // 角色切换时，保存当前会话并创建新会话
+                print("[ChatView] 检测到角色切换: \(settingsManager.settings.roleConfig.roleName)")
+                manager.switchRole(to: settingsManager.settings.roleConfig)
             }
         }
     }

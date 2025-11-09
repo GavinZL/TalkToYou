@@ -207,6 +207,7 @@ struct RoleHistoryView: View {
     @State private var selectedSession: Session?
     @State private var showingDeleteAlert = false
     @State private var sessionToDelete: Session?
+    @State private var showingDeleteAllAlert = false
     
     private let persistence = PersistenceController.shared
     
@@ -237,6 +238,21 @@ struct RoleHistoryView: View {
         }
         .navigationTitle(roleName)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Menu {
+                    Button(role: .destructive, action: {
+                        showingDeleteAllAlert = true
+                    }) {
+                        Label("删除所有会话", systemImage: "trash.fill")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                        .font(.system(size: 20))
+                }
+                .disabled(sessions.isEmpty)
+            }
+        }
         .fullScreenCover(item: $selectedSession) { session in
             RoleHistoryChatView(session: session)
                 .onAppear {
@@ -253,11 +269,38 @@ struct RoleHistoryView: View {
         } message: {
             Text("确定要删除这个对话吗?此操作不可恢复。")
         }
+        .alert("删除所有会话", isPresented: $showingDeleteAllAlert) {
+            Button("取消", role: .cancel) {}
+            Button("删除", role: .destructive) {
+                deleteAllSessions()
+            }
+        } message: {
+            Text("确定要删除该角色的所有会话吗？此操作不可恢复。")
+        }
     }
     
     private func deleteSession(_ session: Session) {
         persistence.deleteSession(session)
         sessions.removeAll { $0.id == session.id }
+    }
+    
+    private func deleteAllSessions() {
+        print("[RoleHistoryView] 开始删除角色 \(roleName) 的所有会话，总数: \(sessions.count)")
+        
+        // 删除所有会话
+        for session in sessions {
+            persistence.deleteSession(session)
+        }
+        
+        // 清空本地状态
+        sessions = []
+        
+        print("[RoleHistoryView] 角色 \(roleName) 的所有会话已删除")
+        
+        // 可选：自动返回上一页
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            dismiss()
+        }
     }
 }
 

@@ -68,6 +68,17 @@ struct Session: Identifiable, Codable {
         self.messageCount = messageCount
         self.roleConfig = roleConfig
     }
+    
+    // 添加可变更新方法
+    mutating func update(title: String? = nil, messageCount: Int? = nil) {
+        if let title = title {
+            self.title = title
+        }
+        if let count = messageCount {
+            self.messageCount = count
+        }
+        self.updateTime = Date()
+    }
 }
 
 // MARK: - Role Configuration

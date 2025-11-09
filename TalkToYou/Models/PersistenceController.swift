@@ -61,6 +61,36 @@ class PersistenceController {
         save()
     }
     
+    func updateSession(_ session: Session) {
+        let context = container.viewContext
+        let request: NSFetchRequest<SessionEntity> = SessionEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", session.id as CVarArg)
+        
+        do {
+            if let entity = try context.fetch(request).first {
+                // 更新现有会话
+                entity.title = session.title
+                entity.updateTime = session.updateTime
+                entity.messageCount = Int32(session.messageCount)
+                
+                if let roleConfig = session.roleConfig {
+                    if let data = try? JSONEncoder().encode(roleConfig) {
+                        entity.roleConfig = data
+                    }
+                }
+                
+                save()
+                print("[持久化] 更新会话: \(session.title)")
+            } else {
+                // 如果不存在，创建新的
+                print("[持久化] 会话不存在，创建新的")
+                saveSession(session)
+            }
+        } catch {
+            print("Failed to update session: \(error)")
+        }
+    }
+    
     func fetchSessions() -> [Session] {
         let context = container.viewContext
         let request: NSFetchRequest<SessionEntity> = SessionEntity.fetchRequest()
@@ -98,12 +128,28 @@ class PersistenceController {
     
     func deleteSession(_ session: Session) {
         let context = container.viewContext
-        let request: NSFetchRequest<SessionEntity> = SessionEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "id == %@", session.id as CVarArg)
+        
+        // 1. 先删除该会话的所有消息
+        let messageRequest: NSFetchRequest<MessageEntity> = MessageEntity.fetchRequest()
+        messageRequest.predicate = NSPredicate(format: "sessionId == %@", session.id as CVarArg)
         
         do {
-            let entities = try context.fetch(request)
+            let messages = try context.fetch(messageRequest)
+            let messageCount = messages.count
+            messages.forEach { context.delete($0) }
+            print("[持久化] 删除会话 \(session.title) 的 \(messageCount) 条消息")
+        } catch {
+            print("Failed to delete messages for session: \(error)")
+        }
+        
+        // 2. 再删除会话本身
+        let sessionRequest: NSFetchRequest<SessionEntity> = SessionEntity.fetchRequest()
+        sessionRequest.predicate = NSPredicate(format: "id == %@", session.id as CVarArg)
+        
+        do {
+            let entities = try context.fetch(sessionRequest)
             entities.forEach { context.delete($0) }
+            print("[持久化] 删除会话: \(session.title)")
             save()
         } catch {
             print("Failed to delete session: \(error)")

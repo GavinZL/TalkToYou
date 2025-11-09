@@ -5,17 +5,17 @@ struct ContentView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            ChatView()
-                .tabItem {
-                    Image(systemName: "message.fill")
-                    Text("对话")
-                }
-                .tag(0)
-            
             HistoryView()
                 .tabItem {
                     Image(systemName: "clock.fill")
                     Text("历史")
+                }
+                .tag(0)
+            
+            ChatView()
+                .tabItem {
+                    Image(systemName: "message.fill")
+                    Text("对话")
                 }
                 .tag(1)
             

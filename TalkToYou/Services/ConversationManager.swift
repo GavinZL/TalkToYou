@@ -134,20 +134,101 @@ class ConversationManager: ObservableObject {
     }
     
     // MARK: - Session Management
-    func startNewSession(roleConfig: RoleConfig? = nil) {
-        let session = persistence.createSession(
-            title: "新对话 \(Date().formatted(.dateTime.month().day().hour().minute()))",
-            roleConfig: roleConfig
-        )
-        currentSession = session
-        messages = []
-        state = .idle
+    
+    /// 加载或创建当前角色的会话
+    /// - Parameter roleConfig: 角色配置，如果为nil则使用当前设置中的角色
+    func loadOrCreateSession(for roleConfig: RoleConfig? = nil) {
+        let currentRole = roleConfig ?? SettingsManager.shared.settings.roleConfig
+        
+        print("[Session] 加载或创建会话 - 角色: \(currentRole.roleName)")
+        
+        // 1. 尝试查找当前角色的最新会话
+        let allSessions = persistence.fetchSessions()
+        let roleSessions = allSessions.filter { session in
+            session.roleConfig?.roleName == currentRole.roleName
+        }
+        
+        if let latestSession = roleSessions.first {
+            // 找到最新会话，加载它
+            print("[Session] 找到最新会话: \(latestSession.title)")
+            loadSession(latestSession)
+        } else {
+            // 没有找到，创建新会话
+            print("[Session] 未找到会话，创建新会话")
+            startNewSession(roleConfig: currentRole)
+        }
     }
     
+    /// 创建新会话
+    /// - Parameter roleConfig: 角色配置
+    func startNewSession(roleConfig: RoleConfig? = nil) {
+        // 如果当前有会话，先保存
+        if let session = currentSession, !messages.isEmpty {
+            print("[Session] 保存当前会话: \(session.title), 消息数: \(messages.count)")
+            // 消息已经在 saveUserMessage 和 saveAssistantMessage 中保存
+            // 这里只需要更新会话信息
+            var updatedSession = session
+            updatedSession.updateTime = Date()
+            updatedSession.messageCount = messages.count
+            persistence.updateSession(updatedSession)
+        }
+        
+        let role = roleConfig ?? SettingsManager.shared.settings.roleConfig
+        let session = persistence.createSession(
+            title: "新对话 \(Date().formatted(.dateTime.month().day().hour().minute()))",
+            roleConfig: role
+        )
+        
+        currentSession = session
+        messages = []  // 清空消息列表
+        state = .idle
+        
+        print("[Session] 创建新会话: \(session.title), 角色: \(role.roleName)")
+    }
+    
+    /// 切换角色（保存当前会话，创建新会话）
+    /// - Parameter roleConfig: 新角色配置
+    func switchRole(to roleConfig: RoleConfig) {
+        print("[Session] 切换角色: \(roleConfig.roleName)")
+        
+        // 1. 保存当前会话
+        if let session = currentSession, !messages.isEmpty {
+            print("[Session] 保存上一个角色的会话: \(session.title)")
+            var updatedSession = session
+            updatedSession.updateTime = Date()
+            updatedSession.messageCount = messages.count
+            persistence.updateSession(updatedSession)
+        }
+        
+        // 2. 清除消息列表
+        messages = []
+        print("[Session] 清空消息列表")
+        
+        // 3. 创建新角色的会话
+        startNewSession(roleConfig: roleConfig)
+    }
+    
+    /// 加载历史会话
+    /// - Parameter session: 要加载的会话
     func loadSession(_ session: Session) {
+        print("[Session] 加载历史会话: \(session.title), ID: \(session.id)")
+        
+        // 如果当前有不同的会话，先保存
+        if let currentSession = currentSession,
+           currentSession.id != session.id,
+           !messages.isEmpty {
+            print("[Session] 保存当前会话后再加载: \(currentSession.title)")
+            var updatedSession = currentSession
+            updatedSession.updateTime = Date()
+            updatedSession.messageCount = messages.count
+            persistence.updateSession(updatedSession)
+        }
+        
         currentSession = session
         messages = persistence.fetchMessages(for: session.id)
         state = .idle
+        
+        print("[Session] 加载了 \(messages.count) 条消息")
     }
     
     // MARK: - Recording Control
