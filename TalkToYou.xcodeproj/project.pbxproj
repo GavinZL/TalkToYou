@@ -12,6 +12,8 @@
 		1677CFF063E6DFB184D026D9 /* 1.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 644E0C6A417F3C4FACA88F2A /* 1.jpeg */; };
 		184AEEDC54ACBB21815990FB /* LLMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6876FC42B50ABED8E2E1335 /* LLMService.swift */; };
 		1F2B8B262EC07969008752E9 /* BackgroundImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2B8B252EC07969008752E9 /* BackgroundImagePicker.swift */; };
+		1F2B8B282EC09C55008752E9 /* SharedChatComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2B8B272EC09C55008752E9 /* SharedChatComponents.swift */; };
+		1F2B8B2A2EC09CE3008752E9 /* ChatInputControlComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2B8B292EC09CD0008752E9 /* ChatInputControlComponents.swift */; };
 		2690780D87FBBE04569523C8 /* TTSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E9411A4B999C7DA092646E /* TTSService.swift */; };
 		285EA253337714AC155AEFA4 /* RoleSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2B871AD173067C7B57E04B /* RoleSelectionView.swift */; };
 		3728FE50BAB46A07CC8AC03A /* RolePresets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8905511CFBF020CF2F58829B /* RolePresets.swift */; };
@@ -39,6 +41,8 @@
 		0CC7FF1CFCEBE26BD3E15B11 /* 3.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 3.jpeg; sourceTree = "<group>"; };
 		135D4CA5C6B4FAAC47399829 /* VoiceRecognitionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecognitionViewModel.swift; sourceTree = "<group>"; };
 		1F2B8B252EC07969008752E9 /* BackgroundImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundImagePicker.swift; sourceTree = "<group>"; };
+		1F2B8B272EC09C55008752E9 /* SharedChatComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedChatComponents.swift; sourceTree = "<group>"; };
+		1F2B8B292EC09CD0008752E9 /* ChatInputControlComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputControlComponents.swift; sourceTree = "<group>"; };
 		28F10A929724CA04891AD6EE /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
 		33E9411A4B999C7DA092646E /* TTSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSService.swift; sourceTree = "<group>"; };
 		3E1765AE548872437FACD830 /* TalkToYou.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TalkToYou.xcdatamodel; sourceTree = "<group>"; };
@@ -99,6 +103,8 @@
 		91B1A45E1706F8ADEECD2F7D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				1F2B8B292EC09CD0008752E9 /* ChatInputControlComponents.swift */,
+				1F2B8B272EC09C55008752E9 /* SharedChatComponents.swift */,
 				1F2B8B252EC07969008752E9 /* BackgroundImagePicker.swift */,
 				C0DDFE8BAC4318B06F507710 /* ChatView.swift */,
 				416525DEFDD829D628F6EFF9 /* HistoryView.swift */,
@@ -264,6 +270,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F2B8B282EC09C55008752E9 /* SharedChatComponents.swift in Sources */,
 				37918C432F40E40F671FF689 /* ASRService.swift in Sources */,
 				CC518CCAE27D34BDAEE157B0 /* AudioRecorder.swift in Sources */,
 				9AAC16D44136F4395F12579A /* ChatView.swift in Sources */,
@@ -281,6 +288,7 @@
 				67632E0CB2AD18DEC036506B /* SettingsView.swift in Sources */,
 				2690780D87FBBE04569523C8 /* TTSService.swift in Sources */,
 				B2DAEC962E519E500D2D55CB /* TalkToYou.xcdatamodeld in Sources */,
+				1F2B8B2A2EC09CE3008752E9 /* ChatInputControlComponents.swift in Sources */,
 				760ABB4189E7031E61BF0715 /* TalkToYouApp.swift in Sources */,
 				9FF2E004EA617A0525BBC715 /* UIConstants.swift in Sources */,
 				43F340527BC73DD04C793A23 /* VoiceCallView.swift in Sources */,

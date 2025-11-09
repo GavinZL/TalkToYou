@@ -1,6 +1,27 @@
 import SwiftUI
 import PhotosUI
 
+//// MARK: - Background Image Helper
+//enum BackgroundImageHelper {
+//    /// 加载背景图片（优先从文档目录，其次从Bundle）
+//    static func loadImage(named: String) -> UIImage? {
+//        // 先尝试从文档目录加载（自定义图片）
+//        if let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first,
+//           let image = UIImage(contentsOfFile: documentsPath.appendingPathComponent(named).path) {
+//            return image
+//        }
+//        
+//        // 再尝试从 Bundle 加载（预设图片）
+//        if let imagesURL = Bundle.main.url(forResource: "Images", withExtension: nil),
+//           let imageURL = URL(string: named, relativeTo: imagesURL),
+//           let image = UIImage(contentsOfFile: imageURL.path) {
+//            return image
+//        }
+//        
+//        return nil
+//    }
+//}
+
 // MARK: - Background Image Picker
 struct BackgroundImagePicker: View {
     @Environment(\.dismiss) private var dismiss
@@ -377,27 +398,6 @@ struct BackgroundImageCell: View {
                 }
             }
         )
-    }
-}
-
-// MARK: - Background Image Helper
-enum BackgroundImageHelper {
-    /// 加载背景图片（优先从文档目录，其次从Bundle）
-    static func loadImage(named: String) -> UIImage? {
-        // 先尝试从文档目录加载（自定义图片）
-        if let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first,
-           let image = UIImage(contentsOfFile: documentsPath.appendingPathComponent(named).path) {
-            return image
-        }
-        
-        // 再尝试从 Bundle 加载（预设图片）
-        if let imagesURL = Bundle.main.url(forResource: "Images", withExtension: nil),
-           let imageURL = URL(string: named, relativeTo: imagesURL),
-           let image = UIImage(contentsOfFile: imageURL.path) {
-            return image
-        }
-        
-        return nil
     }
 }
 

@@ -10,8 +10,6 @@ struct SettingsView: View {
     @State private var contextTurns: Int = 10
     @State private var temperature: Float = 0.8
     @State private var maxTokens: Int = 2000
-    @State private var backgroundImageName: String = ""
-    @State private var backgroundOpacity: Double = 0.3
     
     @State private var showingSaveAlert = false
     
@@ -36,31 +34,10 @@ struct SettingsView: View {
                     
                     Stepper("最大Tokens: \(maxTokens)", value: $maxTokens, in: 500...4000, step: 500)
                 }
-                
-                // 背景设置
-                Section("背景设置") {
-                    TextField("背景图片名称", text: $backgroundImageName)
-                        .autocapitalization(.none)
-                    
-                    VStack(alignment: .leading) {
-                        Text("背景透明度: \(String(format: "%.2f", backgroundOpacity))")
-                        Slider(value: $backgroundOpacity, in: 0.0...1.0, step: 0.05)
-                    }
-                    
-                    Text("请将图片添加到Assets.xcassets中，然后输入图片名称")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
             }
             .navigationTitle("设置")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("取消") {
-                        dismiss()
-                    }
-                }
-                
                 ToolbarItem(placement: .confirmationAction) {
                     Button("保存") {
                         saveSettings()
@@ -91,8 +68,6 @@ struct SettingsView: View {
         contextTurns = settings.contextTurns
         temperature = settings.temperature
         maxTokens = settings.maxTokens
-        backgroundImageName = settings.backgroundImageName ?? ""
-        backgroundOpacity = settings.backgroundOpacity
     }
     
     private func saveSettings() {
@@ -106,11 +81,6 @@ struct SettingsView: View {
             contextTurns: contextTurns,
             temperature: temperature,
             maxTokens: maxTokens
-        )
-        
-        settingsManager.updateBackgroundSettings(
-            imageName: backgroundImageName.isEmpty ? nil : backgroundImageName,
-            opacity: backgroundOpacity
         )
         
         showingSaveAlert = true
