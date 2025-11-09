@@ -39,7 +39,7 @@ struct MessageBubble: View {
             VStack(alignment: message.role == .user ? .trailing : .leading, spacing: 4) {
                 Text(message.textContent)
                     .padding(12)
-                    .background(message.role == .user ? Color.green : Color.blue.opacity(0.6))
+                    .background(message.role == .user ? Color.green : Color.gray)
                     .foregroundColor(message.role == .user ? .white : .primary)
                     .cornerRadius(16)
                 

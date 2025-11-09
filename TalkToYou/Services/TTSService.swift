@@ -11,6 +11,12 @@ class TTSService: NSObject, ObservableObject {
     private let settings = SettingsManager.shared
     private var completionHandler: (() -> Void)?
     
+    // 用于加速播放的音频引擎组件
+    private var audioEngine: AVAudioEngine?
+    private var playerNode: AVAudioPlayerNode?
+    private var timePitch: AVAudioUnitTimePitch?
+    private var audioBuffer: AVAudioPCMBuffer?
+    
     private override init() {
         super.init()
         synthesizer.delegate = self
@@ -46,17 +52,46 @@ class TTSService: NSObject, ObservableObject {
         let detectedLanguage = detectLanguage(processedText)
         print("🌐 [TTS] 检测到语言: \(detectedLanguage)")
         
+        // 获取配置的语速
+        let configuredRate = settings.settings.roleConfig.speechRate
+        
+        // 判断是否需要使用 AVAudioEngine 进行加速（1.0 以上）
+        if configuredRate > 1.0 {
+            // 使用 AVAudioEngine 进行时间拉伸加速
+            speakWithAudioEngine(processedText, language: detectedLanguage, speedRate: configuredRate, completion: completion)
+        } else {
+            // 使用原生 AVSpeechSynthesizer
+            speakWithSynthesizer(processedText, language: detectedLanguage, speedRate: configuredRate, completion: completion)
+        }
+    }
+    
+    // MARK: - Speak with AVSpeechSynthesizer (原生方式)
+    private func speakWithSynthesizer(_ text: String, language: String, speedRate: Float, completion: (() -> Void)?) {
         // 创建语音请求
-        let utterance = AVSpeechUtterance(string: processedText)
+        let utterance = AVSpeechUtterance(string: text)
         
         // 根据检测到的语言选择语音
-        let voice = selectVoice(for: detectedLanguage)
+        let voice = selectVoice(for: language)
         utterance.voice = voice
-        utterance.rate = settings.settings.roleConfig.speechRate
+        
+        // 应用语速映射（0.0-2.0 映射到 AVSpeechUtterance 的有效范围）
+        let mappedRate: Float
+        if speedRate <= 1.0 {
+            // 慢速区间: 0.0-1.0 → MinimumSpeechRate 到 DefaultSpeechRate
+            mappedRate = AVSpeechUtteranceMinimumSpeechRate + (AVSpeechUtteranceDefaultSpeechRate - AVSpeechUtteranceMinimumSpeechRate) * speedRate
+        } else {
+            // 快速区间: 1.0-2.0 → DefaultSpeechRate 到 MaximumSpeechRate
+            let ratio = speedRate - 1.0
+            mappedRate = AVSpeechUtteranceDefaultSpeechRate + (AVSpeechUtteranceMaximumSpeechRate - AVSpeechUtteranceDefaultSpeechRate) * ratio
+        }
+        utterance.rate = mappedRate
+        
         utterance.pitchMultiplier = settings.settings.roleConfig.speechPitch
         utterance.volume = settings.settings.roleConfig.speechVolume
         
-        print("🎙️ [TTS] 语音配置: language=\(voice?.language ?? "unknown"), name=\(voice?.name ?? "unknown"), rate=\(utterance.rate)")
+        print("🎙️ [TTS] 语音配置: language=\(voice?.language ?? "unknown"), name=\(voice?.name ?? "unknown")")
+        print("🎵 [TTS] 语速参数: 配置值=\(speedRate), 映射值=\(String(format: "%.2f", mappedRate)) (原生AVSpeechSynthesizer)")
+        print("🎼 [TTS] 音调=\(settings.settings.roleConfig.speechPitch), 音量=\(settings.settings.roleConfig.speechVolume)")
         
         // 设置完成回调
         self.completionHandler = completion
@@ -66,17 +101,118 @@ class TTSService: NSObject, ObservableObject {
         isSpeaking = true
     }
     
+    // MARK: - Speak with AVAudioEngine (时间拉伸加速)
+    private func speakWithAudioEngine(_ text: String, language: String, speedRate: Float, completion: (() -> Void)?) {
+        print("🚀 [TTS] 使用 AVAudioEngine 进行加速播放: \(speedRate)x")
+        
+        // 保存完成回调
+        self.completionHandler = completion
+        
+        // 创建语音请求
+        let utterance = AVSpeechUtterance(string: text)
+        let voice = selectVoice(for: language)
+        utterance.voice = voice
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate  // 使用正常速度生成
+        utterance.pitchMultiplier = settings.settings.roleConfig.speechPitch
+        utterance.volume = settings.settings.roleConfig.speechVolume
+        
+        // 使用 AVSpeechSynthesizer 的输出作为音频源
+        // 方案：先生成音频，然后用 AVAudioEngine 加速播放
+        
+        // 初始化音频引擎组件
+        audioEngine = AVAudioEngine()
+        playerNode = AVAudioPlayerNode()
+        timePitch = AVAudioUnitTimePitch()
+        
+        guard let engine = audioEngine,
+              let player = playerNode,
+              let timePitch = timePitch else {
+            print("❌ [TTS] 初始化音频引擎失败")
+            // 降级到原生方式
+            speakWithSynthesizer(text, language: language, speedRate: 1.0, completion: completion)
+            return
+        }
+        
+        // 附加节点到引擎
+        engine.attach(player)
+        engine.attach(timePitch)
+        
+        // 设置音频格式
+        let format = AVAudioFormat(standardFormatWithSampleRate: 22050, channels: 1)!
+        
+        // 连接节点: playerNode -> timePitch -> output
+        engine.connect(player, to: timePitch, format: format)
+        engine.connect(timePitch, to: engine.mainMixerNode, format: format)
+        
+        // 设置加速倍率（rate 范围: 1/32 到 32）
+        timePitch.rate = speedRate
+        
+        print("🎵 [TTS] 设置加速倍率: \(speedRate)x")
+        
+        // 配置音频会话
+        do {
+            let audioSession = AVAudioSession.sharedInstance()
+            try audioSession.setCategory(.playback, mode: .default, options: [])
+            try audioSession.setActive(true)
+        } catch {
+            print("❌ [TTS] 音频会话配置失败: \(error.localizedDescription)")
+        }
+        
+        // 启动引擎
+        do {
+            try engine.start()
+            print("✅ [TTS] 音频引擎已启动")
+        } catch {
+            print("❌ [TTS] 启动音频引擎失败: \(error.localizedDescription)")
+            // 降级到原生方式
+            speakWithSynthesizer(text, language: language, speedRate: 1.0, completion: completion)
+            return
+        }
+        
+        // 使用 AVSpeechSynthesizer 生成音频数据并实时送入 AVAudioEngine
+        synthesizer.write(utterance) { [weak self] buffer in
+            guard let self = self,
+                  let pcmBuffer = buffer as? AVAudioPCMBuffer,
+                  let player = self.playerNode else {
+                return
+            }
+            
+            // 调度 buffer 到播放器
+            player.scheduleBuffer(pcmBuffer, completionHandler: nil)
+            
+            // 如果是第一次接收到 buffer，开始播放
+            if !player.isPlaying {
+                player.play()
+                DispatchQueue.main.async {
+                    self.isSpeaking = true
+                    print("▶️  [TTS] 开始加速播放 (\(speedRate)x)")
+                }
+            }
+        }
+    }
+    
     // MARK: - Control Methods
     func pause() {
         synthesizer.pauseSpeaking(at: .word)
+        playerNode?.pause()
     }
     
     func resume() {
         synthesizer.continueSpeaking()
+        playerNode?.play()
     }
     
     func stop() {
         synthesizer.stopSpeaking(at: .immediate)
+        
+        // 停止音频引擎
+        playerNode?.stop()
+        audioEngine?.stop()
+        audioEngine = nil
+        playerNode = nil
+        timePitch = nil
+        audioBuffer = nil
+        
         isSpeaking = false
         completionHandler = nil
     }

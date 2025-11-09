@@ -382,7 +382,10 @@ class ConversationManager: ObservableObject {
     // MARK: - LLM Processing
     
     /// 阶段 4：调用 LLM 生成回复
-    private func performLLM(userMessage: String) async {
+    /// - Parameters:
+    ///   - userMessage: 用户消息
+    ///   - enableTTS: 是否启用TTS播报（默认true，文字输入时为false）
+    private func performLLM(userMessage: String, enableTTS: Bool = true) async {
         print("🤔 ====== [流程] 阶段 4: LLM 生成回复 ======")
         
         await MainActor.run {
@@ -404,9 +407,16 @@ class ConversationManager: ObservableObject {
             print("💾 [步骤 4.2] 保存 AI 消息")
             await saveAssistantMessage(response)
             
-            // 4.3 TTS 播放
-            print("🔊 [步骤 4.3] 开始 TTS 语音播放...")
-            await performTTS(text: response)
+            // 4.3 TTS 播放（根据enableTTS参数决定）
+            if enableTTS {
+                print("🔊 [步骤 4.3] 开始TTS语音播放...")
+                await performTTS(text: response)
+            } else {
+                print("ℹ️ [步骤 4.3] 文字输入模式，跳过TTS播放")
+                await MainActor.run {
+                    state = .idle
+                }
+            }
         } catch {
             await MainActor.run {
                 print("❌ LLM 错误: \(error.localizedDescription)")
@@ -485,8 +495,8 @@ class ConversationManager: ObservableObject {
                 persistence.saveMessage(message)
             }
             
-            // 调用LLM
-            await performLLM(userMessage: text)
+            // 调用LLM（文字输入不进行TTS播报）
+            await performLLM(userMessage: text, enableTTS: false)
         }
     }
     
@@ -509,11 +519,13 @@ class ConversationManager: ObservableObject {
         state = .error(error)
         errorMessage = error.localizedDescription
         
-        // 3秒后重置状态
+        // 3秒后重置状态到 idle
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
-            if case .error = self?.state {
-                self?.state = .idle
-                self?.errorMessage = nil
+            guard let self = self else { return }
+            if case .error = self.state {
+                print("✅ [错误恢复] 3秒后自动恢复到 idle 状态")
+                self.state = .idle
+                self.errorMessage = nil
             }
         }
     }
@@ -558,6 +570,15 @@ class ConversationManager: ObservableObject {
         }
         
         print("✅ [清理] 错误后清理完成")
+        
+        // 清理完成后立即恢复到 idle 状态
+        await MainActor.run {
+            if case .error = state {
+                print("🔄 [清理] 恢复到 idle 状态")
+                state = .idle
+                errorMessage = nil
+            }
+        }
     }
     
     // MARK: - Cleanup
