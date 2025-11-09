@@ -1,4 +1,5 @@
 import SwiftUI
+import PhotosUI
 
 // MARK: - Chat View
 struct ChatView: View {
@@ -8,10 +9,11 @@ struct ChatView: View {
     @State private var showingSettings = false
     @State private var showingVoiceCall = false
     @State private var showingRoleSelection = false
+    @State private var showingMoreMenu = false  // 提升到 ChatView 层级
     
     var body: some View {
         NavigationView {
-            ZStack(alignment: .bottom) {
+            ZStack {
                 // 主内容区域
                 VStack(spacing: 0) {
                     // 消息列表
@@ -20,20 +22,32 @@ struct ChatView: View {
                             Group {
                                 if let imageName = settingsManager.settings.backgroundImageName,
                                    !imageName.isEmpty {
-                                    Image(imageName)
-                                        .resizable()
-                                        .scaledToFill()
-                                        .opacity(settingsManager.settings.backgroundOpacity)
-                                        .ignoresSafeArea()
+                                    // 尝试从文档目录加载（自定义图片）
+                                    if let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first,
+                                       let image = UIImage(contentsOfFile: documentsPath.appendingPathComponent(imageName).path) {
+                                        Image(uiImage: image)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .opacity(settingsManager.settings.backgroundOpacity)
+                                            .ignoresSafeArea()
+                                    }
+                                    // 尝试从 Bundle 加载（预设图片）
+                                    else if let imagesURL = Bundle.main.url(forResource: "Images", withExtension: nil),
+                                            let imageURL = URL(string: imageName, relativeTo: imagesURL),
+                                            let image = UIImage(contentsOfFile: imageURL.path) {
+                                        Image(uiImage: image)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .opacity(settingsManager.settings.backgroundOpacity)
+                                            .ignoresSafeArea()
+                                    } else {
+                                        Color(uiColor: .systemGroupedBackground)
+                                    }
                                 } else {
                                     Color(uiColor: .systemGroupedBackground)
                                 }
                             }
                         )
-                    
-                    // 占位空间，确保输入区域不会贴顶
-                    // Spacer()
-                    //     .frame(minHeight: 100)  // 最小高度 100pt
                     
                     // 整合的输入控制区域（状态栏 + 输入框 + 功能菜单）
                     ChatInputControlView(
@@ -41,6 +55,7 @@ struct ChatView: View {
                         conversationState: manager.state,
                         errorMessage: manager.errorMessage,
                         isProcessing: manager.state != .idle,
+                        showingMoreMenu: $showingMoreMenu,  // 传递 binding
                         onSend: {
                             manager.sendTextMessage(inputText)
                             inputText = ""
@@ -49,6 +64,34 @@ struct ChatView: View {
                             showingVoiceCall = true
                         }
                     )
+                }
+                
+                // 全屏透明遮罩层（在 ChatView 层级）
+                if showingMoreMenu {
+                    Color.clear
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .contentShape(Rectangle())
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            withAnimation(.spring(response: UIConstants.Animation.springResponse, dampingFraction: UIConstants.Animation.springDamping)) {
+                                showingMoreMenu = false
+                            }
+                        }
+                        .zIndex(1)
+                    
+                    // 底部菜单
+                    VStack {
+                        Spacer()
+                        MoreMenuOverlay(
+                            onDismiss: {
+                                withAnimation(.spring(response: UIConstants.Animation.springResponse, dampingFraction: UIConstants.Animation.springDamping)) {
+                                    showingMoreMenu = false
+                                }
+                            }
+                        )
+                    }
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .zIndex(2)
                 }
             }
             .navigationTitle("智能对话")
@@ -285,55 +328,39 @@ struct ChatInputControlView: View {
     let conversationState: ConversationState
     let errorMessage: String?
     let isProcessing: Bool
+    @Binding var showingMoreMenu: Bool  // 改为 Binding
     let onSend: () -> Void
     let onPhoneCall: () -> Void
     
-    @State private var showingMoreMenu = false
-    
     var body: some View {
-        ZStack(alignment: .bottom) {
-            VStack(spacing: 0) {
-                // 状态栏
-                StatusBarView(
-                    state: conversationState,
-                    errorMessage: errorMessage
-                )
-                
-                // 输入区域
-                TextInputAreaView(
-                    inputText: $inputText,
-                    isProcessing: isProcessing,
-                    onSend: onSend,
-                    onPhoneCall: onPhoneCall,
-                    onMore: {
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                            showingMoreMenu.toggle()
-                        }
-                    }
-                )
-                //.offset(y: showingMoreMenu ? 0 : 0)
-                .animation(.spring(response: 0.3, dampingFraction: 0.8), value: showingMoreMenu)
-                
-                // 占位空间（当菜单显示时）
-                if showingMoreMenu {
-                    Color.clear
-                        .frame(height: 280)
-                        .transition(.move(edge: .bottom))
-                }
-            }
+        VStack(spacing: 0) {
+            // 状态栏
+            StatusBarView(
+                state: conversationState,
+                errorMessage: errorMessage
+            )
             
-            // 功能菜单（覆盖在底部）
-            if showingMoreMenu {
-                MoreMenuOverlay(
-                    onDismiss: {
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                            showingMoreMenu = false
-                        }
+            // 输入区域
+            TextInputAreaView(
+                inputText: $inputText,
+                isProcessing: isProcessing,
+                onSend: onSend,
+                onPhoneCall: onPhoneCall,
+                onMore: {
+                    withAnimation(.spring(response: UIConstants.Animation.springResponse, dampingFraction: UIConstants.Animation.springDamping)) {
+                        showingMoreMenu.toggle()
                     }
-                )
-                .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+            )
+            
+            // 占位空间（当菜单显示时）
+            if showingMoreMenu {
+                Color.clear
+                    .frame(height: UIConstants.Layout.moreMenuHeight)
+                    .transition(.move(edge: .bottom))
             }
         }
+        .animation(.spring(response: UIConstants.Animation.springResponse, dampingFraction: UIConstants.Animation.springDamping), value: showingMoreMenu)
     }
 }
 
@@ -398,11 +425,11 @@ struct TextInputAreaView: View {
                     .foregroundColor(.gray)
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
+        .padding(.horizontal, UIConstants.Spacing.standard)
+        .padding(.vertical, UIConstants.Spacing.itemSpacing)
         .background(
             Color(uiColor: .systemBackground)
-                .opacity(0.95)
+                .opacity(UIConstants.Opacity.highTransparent)
                 .ignoresSafeArea(edges: .bottom)
         )
     }
@@ -425,90 +452,6 @@ struct RecordButton: View {
     }
 }
 
-// MARK: - More Menu View
-struct MoreMenuView: View {
-    @Environment(\.dismiss) private var dismiss
-    @ObservedObject private var settingsManager = SettingsManager.shared
-    @State private var showingImagePicker = false
-    
-    var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                // 菜单标题
-                HStack {
-                    Text("更多功能")
-                        .font(.headline)
-                    Spacer()
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 24))
-                            .foregroundColor(.gray)
-                    }
-                }
-                .padding()
-                
-                // 功能按钮网格
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
-                    // 回溯
-                    MenuButton(
-                        icon: "arrow.counterclockwise",
-                        title: "回溯",
-                        action: {
-                            // TODO: 实现回溯功能
-                        }
-                    )
-                    
-                    // 发送图片
-                    MenuButton(
-                        icon: "photo",
-                        title: "发送图片",
-                        action: {
-                            showingImagePicker = true
-                        }
-                    )
-                    
-                    // 心动指令
-                    MenuButton(
-                        icon: "heart.circle",
-                        title: "心动指令",
-                        action: {
-                            // TODO: 实现心动指令
-                        }
-                    )
-                    
-                    // 聊天转小说
-                    MenuButton(
-                        icon: "book.closed",
-                        title: "聊天转小说",
-                        action: {
-                            // TODO: 实现聊天转小说
-                        }
-                    )
-                    
-                    // 小手机内测
-                    MenuButton(
-                        icon: "bubble.left.and.bubble.right",
-                        title: "小手机内测",
-                        badge: true,
-                        action: {
-                            // TODO: 实现小手机内测
-                        }
-                    )
-                }
-                .padding()
-                .padding(.bottom, 20)
-                
-                Spacer()
-            }
-            .frame(maxWidth: .infinity, maxHeight: 350)  // 固定高度，兼容 iOS 13+
-            .background(Color(uiColor: .systemGroupedBackground))
-            .navigationBarHidden(true)
-        }
-        .sheet(isPresented: $showingImagePicker) {
-            BackgroundImagePicker()
-        }
-    }
-}
 
 // MARK: - More Menu Overlay (覆盖式菜单)
 struct MoreMenuOverlay: View {
@@ -518,75 +461,30 @@ struct MoreMenuOverlay: View {
     var body: some View {
         VStack(spacing: 0) {
             // 功能按钮网格
-            LazyVGrid(
-                columns: [
-                    GridItem(.flexible()),
-                    GridItem(.flexible()),
-                    GridItem(.flexible()),
-                    GridItem(.flexible())
-                ],
-                spacing: 20
-            ) {
-                // 回溯
-                MenuButton(
-                    icon: "arrow.counterclockwise",
-                    title: "回溯",
-                    action: {
-                        // TODO: 实现回溯功能
-                        onDismiss()
-                    }
-                )
-                
-                // 发送图片
+            HStack {
+                // 背景设置按钮（左上角）
                 MenuButton(
                     icon: "photo",
-                    title: "发送图片",
+                    title: "背景",
                     action: {
                         showingImagePicker = true
                     }
                 )
                 
-                // 心动指令
-                MenuButton(
-                    icon: "heart.circle",
-                    title: "心动指令",
-                    action: {
-                        // TODO: 实现心动指令
-                        onDismiss()
-                    }
-                )
-                
-                // 聊天转小说
-                MenuButton(
-                    icon: "book.closed",
-                    title: "聊天转小说",
-                    action: {
-                        // TODO: 实现聊天转小说
-                        onDismiss()
-                    }
-                )
-                
-                // 小手机内测
-                MenuButton(
-                    icon: "bubble.left.and.bubble.right",
-                    title: "小手机内测",
-                    badge: true,
-                    action: {
-                        // TODO: 实现小手机内测
-                        onDismiss()
-                    }
-                )
+                Spacer()
             }
-            .padding(.horizontal, 20)
-            .padding(.top, 20)
-            .padding(.bottom, 30)
+            .padding(.horizontal, UIConstants.Spacing.large)
+            .padding(.top, UIConstants.Spacing.gridSpacing)
+            .padding(.bottom, UIConstants.Spacing.gridSpacing)
+
+            Spacer()
         }
-        .frame(height: 280)
+        .frame(height: UIConstants.Layout.moreMenuHeight)
         .frame(maxWidth: .infinity)
         .background(
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: UIConstants.Layout.largeCornerRadius)
                 .fill(Color(uiColor: .systemBackground))
-                .shadow(color: .black.opacity(0.1), radius: 10, y: -5)
+                .shadow(color: .black.opacity(UIConstants.Opacity.shadow), radius: 10, y: -5)
         )
         .ignoresSafeArea(edges: .bottom)
         .sheet(isPresented: $showingImagePicker) {
@@ -607,21 +505,21 @@ struct MenuButton: View {
             VStack(spacing: 12) {
                 ZStack(alignment: .topTrailing) {
                     // 图标背景
-                    RoundedRectangle(cornerRadius: 16)
+                    RoundedRectangle(cornerRadius: UIConstants.Layout.cornerRadius)
                         .fill(Color.gray.opacity(0.15))
-                        .frame(width: 60, height: 60)
+                        .frame(width: UIConstants.Button.menuButtonSize, height: UIConstants.Button.menuButtonSize)
                     
                     // 图标
                     Image(systemName: icon)
-                        .font(.system(size: 28))
+                        .font(.system(size: UIConstants.Button.iconSize))
                         .foregroundColor(.primary)
-                        .frame(width: 60, height: 60)
+                        .frame(width: UIConstants.Button.menuButtonSize, height: UIConstants.Button.menuButtonSize)
                     
                     // 角标
                     if badge {
                         Circle()
                             .fill(Color.red)
-                            .frame(width: 12, height: 12)
+                            .frame(width: UIConstants.Button.badgeSize, height: UIConstants.Button.badgeSize)
                             .offset(x: 5, y: -5)
                     }
                 }
@@ -631,154 +529,6 @@ struct MenuButton: View {
                     .font(.caption)
                     .foregroundColor(.primary)
                     .lineLimit(1)
-            }
-        }
-    }
-}
-
-// MARK: - Background Image Picker
-struct BackgroundImagePicker: View {
-    @Environment(\.dismiss) private var dismiss
-    @ObservedObject private var settingsManager = SettingsManager.shared
-    
-    // 预设背景图片列表（需要先添加到 Assets）
-    private let backgroundImages = [
-        "", // 无背景
-        "background1",
-        "background2",
-        "background3",
-        "background4"
-    ]
-    
-    var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(spacing: 20) {
-                    // 透明度调节
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("背景透明度")
-                            .font(.headline)
-                        
-                        HStack {
-                            Text("\(Int(settingsManager.settings.backgroundOpacity * 100))%")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                                .frame(width: 50)
-                            
-                            Slider(
-                                value: Binding(
-                                    get: { settingsManager.settings.backgroundOpacity },
-                                    set: { newValue in
-                                        settingsManager.updateBackgroundSettings(
-                                            imageName: settingsManager.settings.backgroundImageName,
-                                            opacity: newValue
-                                        )
-                                    }
-                                ),
-                                in: 0.0...1.0,
-                                step: 0.05
-                            )
-                        }
-                    }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color(uiColor: .systemBackground))
-                    )
-                    
-                    // 背景图片选择
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("选择背景")
-                            .font(.headline)
-                        
-                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
-                            ForEach(backgroundImages, id: \.self) { imageName in
-                                BackgroundImageCell(
-                                    imageName: imageName,
-                                    isSelected: settingsManager.settings.backgroundImageName == imageName,
-                                    onSelect: {
-                                        settingsManager.updateBackgroundSettings(
-                                            imageName: imageName.isEmpty ? nil : imageName,
-                                            opacity: settingsManager.settings.backgroundOpacity
-                                        )
-                                    }
-                                )
-                            }
-                        }
-                    }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color(uiColor: .systemBackground))
-                    )
-                }
-                .padding()
-            }
-            .background(Color(uiColor: .systemGroupedBackground))
-            .navigationTitle("背景设置")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("完成") {
-                        dismiss()
-                    }
-                }
-            }
-        }
-    }
-}
-
-// MARK: - Background Image Cell
-struct BackgroundImageCell: View {
-    let imageName: String
-    let isSelected: Bool
-    let onSelect: () -> Void
-    
-    var body: some View {
-        Button(action: onSelect) {
-            ZStack(alignment: .topTrailing) {
-                // 背景预览
-                Group {
-                    if imageName.isEmpty {
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [Color.blue.opacity(0.3), Color.purple.opacity(0.3)]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .overlay(
-                                Text("无背景")
-                                    .font(.caption)
-                                    .foregroundColor(.white)
-                            )
-                    } else {
-                        Image(imageName)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(height: 120)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                    }
-                }
-                .frame(height: 120)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(isSelected ? Color.blue : Color.clear, lineWidth: 3)
-                )
-                
-                // 选中标记
-                if isSelected {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 24))
-                        .foregroundColor(.blue)
-                        .background(
-                            Circle()
-                                .fill(Color.white)
-                                .frame(width: 20, height: 20)
-                        )
-                        .offset(x: -8, y: 8)
-                }
             }
         }
     }

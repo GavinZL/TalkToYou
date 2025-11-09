@@ -11,6 +11,8 @@ targets:
     deploymentTarget: "13.0"
     sources:
       - TalkToYou
+    resources:
+      - TalkToYou/Resources/TalkToYou.xcdatamodeld
     settings:
       base:
         INFOPLIST_FILE: TalkToYou/Info.plist
@@ -19,3 +21,19 @@ targets:
         CODE_SIGN_STYLE: Automatic
         SWIFT_VERSION: "5.0"
         TARGETED_DEVICE_FAMILY: "1,2"
+    preBuildScripts:
+      - script: |
+          # 复制 Images 目录到 app bundle
+          IMAGES_SRC="${SRCROOT}/TalkToYou/Resources/Images"
+          IMAGES_DEST="${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Images"
+          
+          if [ -d "$IMAGES_SRC" ]; then
+            echo "Copying Images directory to app bundle..."
+            mkdir -p "$IMAGES_DEST"
+            cp -R "$IMAGES_SRC/" "$IMAGES_DEST/"
+            echo "Images directory copied successfully"
+          else
+            echo "Warning: Images directory not found at $IMAGES_SRC"
+          fi
+        name: Copy Images Folder
+        basedOnDependencyAnalysis: false
