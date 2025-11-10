@@ -162,15 +162,31 @@ class ConversationManager: ObservableObject {
     /// 创建新会话
     /// - Parameter roleConfig: 角色配置
     func startNewSession(roleConfig: RoleConfig? = nil) {
-        // 如果当前有会话，先保存
-        if let session = currentSession, !messages.isEmpty {
-            print("[Session] 保存当前会话: \(session.title), 消息数: \(messages.count)")
-            // 消息已经在 saveUserMessage 和 saveAssistantMessage 中保存
-            // 这里只需要更新会话信息
-            var updatedSession = session
-            updatedSession.updateTime = Date()
-            updatedSession.messageCount = messages.count
-            persistence.updateSession(updatedSession)
+        // 如果当前有会话，先处理保存逻辑
+        if let session = currentSession {
+            if !messages.isEmpty {
+                // 有会话内容，保存会话并使用第一条用户消息的前20个字符作为标题
+                let firstUserMessage = messages.first { $0.role == .user }
+                var title = session.title
+                
+                if let firstMessage = firstUserMessage?.textContent {
+                    // 获取前20个字符作为标题
+                    let endIndex = firstMessage.index(firstMessage.startIndex, offsetBy: min(20, firstMessage.count))
+                    title = String(firstMessage[..<endIndex])
+                }
+                
+                print("[Session] 保存当前会话: \(title), 消息数: \(messages.count)")
+                
+                var updatedSession = session
+                updatedSession.title = title
+                updatedSession.updateTime = Date()
+                updatedSession.messageCount = messages.count
+                persistence.updateSession(updatedSession)
+            } else {
+                // 没有会话内容，删除这个空会话
+                print("[Session] 当前会话无内容，删除空会话: \(session.title)")
+                persistence.deleteSession(session)
+            }
         }
         
         let role = roleConfig ?? SettingsManager.shared.settings.roleConfig

@@ -139,7 +139,7 @@ enum UIConstants {
         static let standardDuration: Double = 0.3
         
         /// 抖动动画时长
-        static let shakeDuration: Double = 0.3
+        static let shakeDuration: Double = 0.1
         
         /// 抖动角度
         static let shakeRotation: Double = 2.0
